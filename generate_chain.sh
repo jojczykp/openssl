@@ -25,38 +25,53 @@ cert_gen_ca() {
     echo "*** - name: ${NAME}"
     echo "*** - subject: ${SUBJ}"
 
+    PIN="${NAME}.pin"
+    KEY="${NAME}.key"
+    CRT="${NAME}.crt"
+    P12="${NAME}.p12"
+
     echo "* Password..."
-    gen_pin > "${NAME}.pin"
+    gen_pin > "${PIN}"
 
     echo "* Certificate..."
     openssl req \
-        -newkey rsa:4096 -keyout "${NAME}.key" \
-        -x509 -out "${NAME}.crt" \
+        -newkey rsa:4096 -keyout "${KEY}" \
+        -x509 -out "${CRT}" \
         -days 36500 -subj "${SUBJ}" \
-        -passout "file:${NAME}.pin"
+        -passout "file:${PIN}"
 
     echo "* PKCS#12 Keystore..."
     openssl pkcs12 \
         -export -name "${NAME}" \
-        -in "${NAME}.crt" -inkey "${NAME}.key" -passin "file:${NAME}.pin" \
-        -out "${NAME}.pkcs12" -passout "pass:$(cat "${NAME}.pin")"
+        -in "${CRT}" -inkey "${KEY}" -passin "file:${PIN}" \
+        -out "${P12}" -passout "pass:$(cat "${PIN}")"
 }
 
 
 cert_gen_signed() {
-    CA="$1"
+    CA_NAME="$1"
     NAME="$2"
     SUBJ="$3"
-    shift 3
 
     echo "*** Generating signed certificate"
     echo "*** - name: ${NAME}"
     echo "*** - subject: ${SUBJ}"
-    echo "*** - signed by: ${CA}"
+    echo "*** - signed by: ${CA_NAME}"
     echo "*** - alternative dns names: $@"
 
+    CA_CRT="${CA_NAME}.crt"
+    CA_KEY="${CA_NAME}.key"
+    CA_PIN="${CA_NAME}.pin"
+
+    CNF="${NAME}.cnf"
+    PIN="${NAME}.pin"
+    KEY="${NAME}.key"
+    CSR="${NAME}.csr"
+    CRT="${NAME}.crt"
+    P12="${NAME}.p12"
+
     echo "* Config..."
-    cat <<EOF > "${NAME}.cnf"
+    cat <<EOF > "${CNF}"
 [req]
 distinguished_name = req_distinguished_name
 req_extensions = req_v3_ext
@@ -72,38 +87,39 @@ subjectAltName = @alt_names
 DNS.1 = ${NAME}
 EOF
 
+    shift 4
     ALT_NAME_CNT=1
-    while [[ -n "${1}" ]]
+    while [[ -n "$1" ]]
     do
         ALT_NAME_CNT=$((ALT_NAME_CNT + 1))
-        echo "DNS.${ALT_NAME_CNT} = ${1}" >> "${NAME}.cnf"
+        echo "DNS.${ALT_NAME_CNT} = $1" >> "${CNF}"
         shift
     done
 
     echo "* Password..."
-    gen_pin > "${NAME}.pin"
+    gen_pin > "${PIN}"
 
     echo "* Certificate Sign Request..."
     openssl req \
-        -config "${NAME}.cnf" \
-        -newkey rsa:4096 -keyout "${NAME}.key" \
-        -out "${NAME}.csr" \
+        -config "${CNF}" \
+        -newkey rsa:4096 -keyout "${KEY}" \
+        -out "${CSR}" \
         -subj "${SUBJ}" \
-        -passout "file:${NAME}.pin"
+        -passout "file:${PIN}"
 
     echo "* Signed Certificate..."
     openssl x509 -req \
-        -extfile "${NAME}.cnf" -extensions req_v3_ext \
-        -CA "${CA}.crt" -CAkey "${CA}.key" -CAcreateserial \
-        -in "${NAME}.csr" -passin "file:${CA}.pin" \
-        -out "${NAME}.crt" \
+        -extfile "${CNF}" -extensions req_v3_ext \
+        -CA "${CA_CRT}" -CAkey "${CA_KEY}" -CAcreateserial \
+        -in "${CSR}" -passin "file:${CA_PIN}" \
+        -out "${CRT}" \
         -days 36500 -sha512
 
     echo "* PKCS#12 Keystore..."
     openssl pkcs12 \
         -export -name "${NAME}" \
-        -in "${NAME}.crt" -inkey "${NAME}.key" -passin "file:${NAME}.pin" \
-        -out "${NAME}.pkcs12" -passout "pass:$(cat "${NAME}.pin")"
+        -in "${CRT}" -inkey "${KEY}" -passin "file:${PIN}" \
+        -out "${P12}" -passout "pass:$(cat "${PIN}")"
 }
 
 

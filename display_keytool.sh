@@ -8,7 +8,7 @@ then
     echo "Usage:"
     echo "    ${0} <path>"
     echo "Where:"
-    echo "    <path> - path to keytool cert file (*.jks, *.pkcs, *.p12, ...)"
+    echo "    <path> - path to keytool cert file (*.jks, *.p12, *.pkcs, ...)"
     echo ""
     echo "  If optional *.pin file is present, it's content is taken as password."
     exit 1
@@ -17,7 +17,7 @@ fi
 CERT_PATH="${1}"
 echo "Cert path: ${CERT_PATH}"
 
-PIN_PATH="${1%%\.*}.pin"
+PIN_PATH="${1%\.*}.pin"
 echo -n "PIN path: ${PIN_PATH} "
 
 if [[ -f "${PIN_PATH}" ]]
