@@ -10,7 +10,7 @@ Handy tool to generate certificates chain.
 Prerequisites
 =============
 
-- Bash
-- OpenSSL
-- Optionally: keytool
+- `bash`
+- `openssl`
+- `keytool` (optional)
 
