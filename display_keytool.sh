@@ -23,7 +23,7 @@ echo -n "PIN path: ${PIN_PATH} "
 if [[ -f "${PIN_PATH}" ]]
 then
     PIN_ARG="-storepass $(cat "${PIN_PATH}")"
-    echo "(preset)"
+    echo "(found)"
 else
     echo "(not found)"
 fi
