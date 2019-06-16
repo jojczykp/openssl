@@ -8,7 +8,7 @@ then
     echo "Usage:"
     echo "    ${0} <path>"
     echo "Where:"
-    echo "    <path> - path to keytool cert file (*.jks, *.p12, *.pkcs, ...)"
+    echo "    <path> - path to keytool cert file (*.jks, *.p12, *.pkcs12, ...)"
     echo ""
     echo "  If optional *.pin file is present, it's content is taken as password."
     exit 1

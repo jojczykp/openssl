@@ -9,6 +9,8 @@ then
     echo "    ${0} <path>"
     echo "Where:"
     echo "    <path> - path to openssl cert file (*.p12, pkcs12, ...)"
+    echo ""
+    echo "  If optional *.pin file is present, it's content is taken as password."
     exit 1
 fi
 
