@@ -40,7 +40,6 @@ cert_gen_ca() {
         -export -name "${NAME}" \
         -in "${NAME}.crt" -inkey "${NAME}.key" -passin "file:${NAME}.pin" \
         -out "${NAME}.pkcs12" -passout "pass:$(cat "${NAME}.pin")"
-
 }
 
 
