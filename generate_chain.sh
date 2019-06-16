@@ -2,6 +2,15 @@
 
 set -e
 
+if [[ -z "${1}" ]]
+then
+    echo "Usage:"
+    echo "    ${0} <dest-folder>"
+    exit 1
+fi
+
+cd "${1}"
+
 
 gen_pin() {
     date +%Y%m%s%H%M%S%N | tr -d '\n'
@@ -99,33 +108,8 @@ EOF
 }
 
 
-cert_display_with_openssl() {
-    NAME="${1}"
-    openssl x509 -in "${NAME}.crt" -noout -text
-}
-
-
-cert_display_with_keytool() {
-    NAME="${1}"
-    keytool -list -keystore "${NAME}.pkcs12" -v -storepass $(cat "${NAME}.pin")
-}
-
-
-
-if [[ -z "${1}" ]]
-then
-    echo "Usage:"
-    echo "    ${0} <dest-folder>"
-    exit 1
-fi
-
-cd "${1}"
-
-
 cert_gen_ca "ca" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=ca"
 cert_gen_signed "ca" "site1" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=site1" "site1.com" "*.site1.com"
 cert_gen_signed "ca" "site2" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=site2" "site2.com" "*.site2.com"
 cert_gen_signed "ca" "site3" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=site3" "site3.com" "*.site3.com"
 
-#cert_display_with_openssl "site1"
-#cert_display_with_keytool "site1"
