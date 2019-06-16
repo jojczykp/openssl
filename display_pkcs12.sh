@@ -31,4 +31,3 @@ fi
 echo ""
 
 openssl pkcs12 -info -nokeys -in "${CERT_PATH}" ${PIN_ARG}
-

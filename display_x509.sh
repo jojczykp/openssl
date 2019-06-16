@@ -18,4 +18,3 @@ echo "Cert path: ${CERT_PATH}"
 echo ""
 
 openssl x509 -in "${CERT_PATH}" -noout -text
-

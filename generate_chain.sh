@@ -127,4 +127,3 @@ cert_gen_ca "ca" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=ca"
 cert_gen_signed "ca" "site1" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=site1" "site1.com" "*.site1.com"
 cert_gen_signed "ca" "site2" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=site2" "site2.com" "*.site2.com"
 cert_gen_signed "ca" "site3" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=site3" "site3.com" "*.site3.com"
-

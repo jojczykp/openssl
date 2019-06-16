@@ -31,4 +31,3 @@ fi
 echo ""
 
 keytool -list -keystore "${CERT_PATH}" -v ${PIN_ARG}
-
