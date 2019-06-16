@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-cd "${1}"
+DEST_FOLDER="${1}"
 
 
 gen_pin() {
@@ -107,6 +107,8 @@ EOF
         -out "${NAME}.pkcs12" -passout "pass:$(cat "${NAME}.pin")"
 }
 
+
+cd "${DEST_FOLDER}"
 
 cert_gen_ca "ca" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=ca"
 cert_gen_signed "ca" "site1" "/C=PL/L=Krakow/O=alterbit/OU=security/CN=site1" "site1.com" "*.site1.com"
