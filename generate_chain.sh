@@ -49,7 +49,7 @@ cert_gen_signed() {
     SUBJ="$3"
     shift 3
 
-    echo "*** Generating certificate '${NAME}' with subject '${SUBJ}' signed by '${CA}'"
+    echo "*** Generating signed certificate"
     echo "*** - name: ${NAME}"
     echo "*** - subject: ${SUBJ}"
     echo "*** - signed by: ${CA}"
