@@ -52,6 +52,7 @@ cert_gen_signed() {
     CA_NAME="$1"
     NAME="$2"
     SUBJ="$3"
+    shift 3
 
     echo "*** Generating signed certificate"
     echo "*** - name: ${NAME}"
@@ -84,11 +85,8 @@ keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = ${NAME}
 EOF
 
-    shift 4
-    ALT_NAME_CNT=1
     while [[ -n "$1" ]]
     do
         ALT_NAME_CNT=$((ALT_NAME_CNT + 1))
